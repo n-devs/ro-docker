@@ -1,6 +1,6 @@
-version: '3' # vs mais atual
+version: '3.8' # vs mais atual
 
-services: 
+services:
   serve:
     build: ro-serve
     container_name: ro-serve
@@ -18,7 +18,7 @@ services:
       - REDIRECT_STATUS=true
     networks:
       - ro-network
-    depends_on: 
+    depends_on:
       - db
 
   db:
@@ -66,6 +66,19 @@ services:
     networks:
       - ro-network
 
+  fluxcp:
+    php-apache-environment:
+      container_name: ro-fluxcp
+      image: php:5.2-apache
+      volumes:
+        - ./ro-fluxcp:/var/www/html/
+      ports:
+        - 8081:80
+      networks:
+        - ro-network
+      depends_on:
+        - db
+
   ip:
     build: public-ip
     container_name: public-ip
@@ -108,7 +121,7 @@ services:
       - PMA_HOST:db
       - MYSQL_USERNAME:ragnarok
       - MYSQL_ROOT_PASSWORD:ragnarok
-    depends_on: 
+    depends_on:
       - db
     networks:
       - ragnarok-app-network

@@ -11,6 +11,8 @@ git clone https://github.com/n-devs/ro-play.git
 git clone https://github.com/n-devs/ro-wsproxy.git
 
 git clone https://github.com/n-devs/ro-files.git
+
+git clone https://github.com/n-devs/ro-fluxcp.git
 ````
 
 ## Config RO Serve
