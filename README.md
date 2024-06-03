@@ -6,17 +6,17 @@ git clone https://github.com/n-devs/ro-db.git
 
 git clone https://github.com/n-devs/ro-serve.git
 
-git clone https://github.com/n-devs/ro-play.git
+git clone https://github.com/n-devs/ro-play.git && cd ro-play && npm i
 
-git clone https://github.com/n-devs/ro-wsproxy.git
+git clone https://github.com/n-devs/ro-wsproxy.git && cd ro-wsproxy && npm i
 
-git clone https://github.com/n-devs/ro-files.git
+git clone https://github.com/n-devs/ro-files.git && cd ro-files && npm i
 
-git clone https://github.com/n-devs/ro-fluxcp.git
+git clone https://github.com/n-devs/ro-fluxcp.git 
 
-git clone https://github.com/n-devs/ro-api.git
+git clone https://github.com/n-devs/ro-api.git && cd ro-api && npm i
 
-git clone https://github.com/n-devs/ro-ip.git
+git clone https://github.com/n-devs/ro-ip.git && cd ro-ip && npm i
 ````
 
 ## Config RO Serve
