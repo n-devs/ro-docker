@@ -1,4 +1,4 @@
-version: '3.8' # vs mais atual
+version: '3' # vs mais atual
 
 services:
   serve:
