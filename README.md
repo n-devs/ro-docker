@@ -28,7 +28,7 @@ EXP:
 #### 3 º - Nas configurações de acesso ao banco de dados que os emuladores utilizam como o arquivo ````inter_athena.conf````, substitua ````127.0.0.1```` por ````db````.
 EXP-PASTA: 
 ````
-  /db/sql-file
+  /ro-db/sql-file
     - item_db.sql
     - mob_db.sql
     - logs.sql
@@ -36,18 +36,18 @@ EXP-PASTA:
 ````
 EXP-docker-compose.yaml: 
 ````
-  - ./db/sql-files:/docker-entrypoint-initdb.d
+  - ./ro-db/sql-files:/docker-entrypoint-initdb.d
 ````
 
 #### 4 º - Nas configurações de acesso como ````char_athena.conf````, ````login_athena.conf```` e ````map_athena.conf```` substitua ````127.0.0.1```` por ````server````.
 #### Mudar os arquivos
 ````
-    rathena/conf/inter_athena.conf
-    rathena/conf/char_athena.conf  
-    rathena/conf/map_athena.conf
-    rathena/conf/login_athena.conf
-    rathena/conf/subnet_athena.conf
-    rathena/src/custom/defines_pre.hpp
+    ro-serve/conf/inter_athena.conf
+    ro-serve/conf/char_athena.conf  
+    ro-serve/conf/map_athena.conf
+    ro-serve/conf/login_athena.conf
+    ro-serve/conf/subnet_athena.conf
+    ro-serve/src/custom/defines_pre.hpp
 ````
 ## Arquivos inter_athena.conf
 Mude de as linhas ````_ip: 127.0.0.1```` para ````_ip: db````
@@ -125,73 +125,49 @@ Then make sure put your custom keys on db/[import/]packet_db.txt, in packet_keys
 Elembrar de acessar o conteiner do emulador ````docker exec -i -t serve-ragnarok /bin/bash````.
 
 Exemplo:  ````./configure --enable-packetver=20141022 && make clean && make server```` ou ````./entrypoint.sh````
-## Config RoBrawser
-#### Mudar os arquivos
+
+## Config Ro Files
+#### ส่วนเสริม ที่ต้องนำ file ของตัวเองมาแก้อัพเดต
 ````
-    app/roBrowser/client/Client.php
-    app/roBrowser/client/index.php
-    e
-    app/roBrowser/client/BGM
-    app/roBrowser/client/data
-    app/roBrowser/client/resources
-````
-## Arquivos Client.php
-Mude as linhas
-````if (file_exists($local_pathEncoded) && !is_dir($local_pathEncoded) && is_readable($local_pathEncoded)) {````
-
-Para
-
-````if (file_exists($local_pathEncoded) && is_readable($local_pathEncoded)) {````
-
-## Arquivos index.php
-#### 1º passo
-Mude as linhas
-````if (empty($_SERVER['REDIRECT_STATUS']) || $_SERVER['REDIRECT_STATUS'] != 404 || empty($_SERVER['REQUEST_URI'])) {````
-
-Para
-
-````if (empty($_SERVER['REDIRECT_STATUS']) || empty($_SERVER['REQUEST_URI'])) {````
-
-#### 2º passo
-Comentar a linha
-````
-if (!preg_match( '/\/('. $directory . '\/)?(data|BGM)\//', $path)) {
-		Debug::write('Forbidden directory, you can just access files located in data and BGM folder.', 'error');
-		Debug::output();
-	}
+   ro-files/AI
+   ro-files/BGM
+   ro-files/data
+   ro-files/resources
 ````
 
-Para
 
-````
-	// if (!preg_match( '/\/('. $directory . '\/)?(data|BGM)\//', $path)) {
-	// 	Debug::write('Forbidden directory, you can just access files located in data and BGM folder.', 'error');
-	// 	Debug::output();
-	// }
-````
 
-#### 4º passo
-1 - app/roBrowser/client/BGM
-  - Os arquivos .mp3 do seu serve
+#### 4. passo
+1 - ro-files/AI
+  - update AI ของคุณ
 
-2 - app/roBrowser/client/data
-  - Adicione a sua pasta ````data```` em ````./data````.
+2 - ro-files/BGM
+  - update file .mp3 ของคุณ
+
+3 - ro-files/data
+  - update data ของคุณ โดยจะ export มาจาก file data.grf มาเป็น โฟล์เดอร์ data
  
-3 - app/roBrowser/client/resources
-  - E em ````resources```` a ````data.grf```` completa com a ````DATA.INI```` configurada.
+4 - ro-files/resources
+  - ในโฟล์เดอร์ ````resources```` จะประกอบไปด้วย ````data.grf```` และ ````DATA.INI```` หรือ file *.grf.
 
+## Config Ro Play
+#### ส่วนเสริม ที่ต้องนำ file ของตัวเองมาแก้อัพเดต
+````
+   ro-play/public/AI
+   ro-play/public/BGM
+   ro-play/public/System
+
+````
 
 # Comandos Mais usados 
 #### Start o docker-composer
 docker-compose -f "docker-compose.yaml" up -d --build
 #### Stop o docker-composer
 docker compose -f "docker-compose.yaml" down
-#### Configurar o Emulador
-"./configure && make clean && make server" ou "./configure && make clean && make sql"
-#### Start do emulador 
+#### Configurar o ro serve 
+"./configure && make clean && make server" หรือ "./configure && make clean && make sql"
+#### Start do ro serve 
 "./athena-start start"
-#### Start no proxy 
-"wsproxy -a serve:6900,serve:6121,serve:5121"
 
 Obs:
 ````
@@ -200,12 +176,11 @@ Obs:
 	3  - Teste a sua conexão com o websocat. Tente instalar utilizando cargo install websocat e executando o comando como exemplo: "websocat ws://websocket.example.com:5999/127.0.0.1:690"	
 ````
 
-# Comandos uteis
+# Step Run Command
  - docker exec -i -t serve-ragnarok /bin/bash
  - ./entrypoint.sh 
  - ./configure && make clean && make server
- - wsproxy -a serve:6900,serve:6121,serve:5121
  - docker-compose -f "docker-compose.yaml" up -d --build
- - wsproxy -a serve:6900,serve:6121,serve:5121 & ./athena-start start
+ - ./athena-start start
  - mysql -uragnarok -pragnarok;
  - USE ragnarok;
