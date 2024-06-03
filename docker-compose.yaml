@@ -67,17 +67,17 @@ services:
       - ro-network
 
   fluxcp:
-    php-apache-environment:
-      container_name: ro-fluxcp
-      image: php:5.2-apache
-      volumes:
-        - ./ro-fluxcp:/var/www/html/
-      ports:
-        - 8081:80
-      networks:
-        - ro-network
-      depends_on:
-        - db
+    build: ro-fluxcp
+    container_name: ro-fluxcp
+    image: php:5.2-apache
+    volumes:
+      - ./ro-fluxcp:/var/www/html/
+    ports:
+      - 8081:80
+    networks:
+      - ro-network
+    depends_on:
+      - db
 
   ip:
     build: public-ip
