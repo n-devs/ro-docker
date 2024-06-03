@@ -69,11 +69,13 @@ services:
   fluxcp:
     build: ro-fluxcp
     container_name: ro-fluxcp
-    image: php:5.2-apache
+    restart: always
+    tty: true
+    working_dir: /var/www/html
     volumes:
-      - ./ro-fluxcp:/var/www/html/
+      - ./ro-fluxcp:/var/www/html
     ports:
-      - 8081:80
+      - 7788:80
     networks:
       - ro-network
     depends_on:
