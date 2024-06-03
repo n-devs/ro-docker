@@ -1,0 +1,118 @@
+version: '3' # vs mais atual
+
+services: 
+  serve:
+    build: ro-serve
+    container_name: ro-serve
+    restart: always
+    tty: true
+    working_dir: /ro-serve
+    volumes:
+      - ./ro-serve:/ro-serve
+    ports:
+      - "5121:5121"
+      - "6121:6121"
+      - "6900:6900"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REDIRECT_STATUS=true
+    networks:
+      - ro-network
+    depends_on: 
+      - db
+
+  db:
+    build: ro-db
+    container_name: ro-ragnarok-db
+    restart: always
+    tty: true
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./ro-db/dbdata:/var/lib/mysql
+      - ./ro-db/sql-files:/docker-entrypoint-initdb.d
+      - ./ro-db/log:/var/log/mysql
+    environment:
+      - MYSQL_DATABASE=ragnarok
+      - MYSQL_ROOT_PASSWORD=R00t+
+      - MYSQL_USER=ragnarok
+      - MYSQL_PASSWORD=ragnarok
+    networks:
+      - ro-network
+
+  files:
+    build: ro-files
+    container_name: ro-files
+    restart: always
+    tty: true
+    working_dir: /ro-files
+    volumes:
+      - ./ro-files:/ro-files
+    ports:
+      - "5737:5737"
+    networks:
+      - ro-network
+
+  play:
+    build: ro-play
+    container_name: ro-play
+    restart: always
+    tty: true
+    working_dir: /ro-play
+    volumes:
+      - ./ro-play:/ro-play
+    ports:
+      - "8000:8000"
+    networks:
+      - ro-network
+
+  ip:
+    build: public-ip
+    container_name: public-ip
+    restart: always
+    tty: true
+    working_dir: /public-ip
+    volumes:
+      - ./public-ip:/public-ip
+    networks:
+      - ro-network
+
+  wsproxy:
+    # image: node:18
+    build: ro-wsproxy
+    container_name: ro-wsproxy
+    restart: always
+    tty: true
+    # command: >
+    #   bash -c wsproxy -a 127.0.0.1:6900,127.0.0.1:6121,127.0.0.1:5121
+    # command: >
+    #   bash -c wsproxy -a serve:6900,serve:6121,serve:5121
+    ports:
+      - "5999:5999"
+    networks:
+      - ro-network
+    depends_on:
+      - serve
+      - files
+      - play
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      # 8080 is the host port and 80 is the docker port
+      - "9000:80"
+    environment:
+      - PMA_ARBITRARY:1
+      - PMA_HOST:db
+      - MYSQL_USERNAME:ragnarok
+      - MYSQL_ROOT_PASSWORD:ragnarok
+    depends_on: 
+      - db
+    networks:
+      - ragnarok-app-network
+
+networks:
+  ro-network:
+    driver: bridge
