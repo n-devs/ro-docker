@@ -15,6 +15,8 @@ git clone https://github.com/n-devs/ro-files.git
 git clone https://github.com/n-devs/ro-fluxcp.git
 
 git clone https://github.com/n-devs/ro-api.git
+
+git clone https://github.com/n-devs/ro-ip.git
 ````
 
 ## Config RO Serve

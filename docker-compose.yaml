@@ -80,13 +80,13 @@ services:
       - db
 
   ip:
-    build: public-ip
-    container_name: public-ip
+    build: ro-ip
+    container_name: ro-ip
     restart: always
     tty: true
-    working_dir: /public-ip
+    working_dir: /ro-ip
     volumes:
-      - ./public-ip:/public-ip
+      - ./ro-ip:/ro-ip
     networks:
       - ro-network
 
