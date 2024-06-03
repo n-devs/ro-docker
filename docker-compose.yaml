@@ -78,8 +78,6 @@ services:
       - 7788:80
     networks:
       - ro-network
-    depends_on:
-      - db
 
   ip:
     build: ro-ip
