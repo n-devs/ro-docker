@@ -124,7 +124,27 @@ services:
     depends_on:
       - db
     networks:
-      - ragnarok-app-network
+      - ro-network
+    
+  api:
+    build: ro-api
+    container_name: ro-api
+    restart: always
+    tty: true
+    working_dir: /ro-api
+    volumes:
+      - ./ro-api:/ro-api
+    ports:
+      - "7373:7373"
+    environment:
+      - MYSQL_HOST:db
+      - MYSQL_USER:ragnarok
+      - MYSQL_PASSWORD:ragnarok
+      - MYSQL_DATABASE:ragnarok
+    depends_on:
+      - db
+    networks:
+      - ro-network
 
 networks:
   ro-network:

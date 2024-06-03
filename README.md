@@ -13,6 +13,8 @@ git clone https://github.com/n-devs/ro-wsproxy.git
 git clone https://github.com/n-devs/ro-files.git
 
 git clone https://github.com/n-devs/ro-fluxcp.git
+
+git clone https://github.com/n-devs/ro-api.git
 ````
 
 ## Config RO Serve
