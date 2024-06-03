@@ -23,7 +23,7 @@ services:
 
   db:
     build: ro-db
-    container_name: ro-ragnarok-db
+    container_name: ro-db
     restart: always
     tty: true
     ports:
@@ -31,7 +31,7 @@ services:
     volumes:
       - ./ro-db/dbdata:/var/lib/mysql
       - ./ro-db/sql-files:/docker-entrypoint-initdb.d
-      - ./ro-db/log:/var/log/mysql
+      # - ./ro-db/log:/var/log/mysql
     environment:
       - MYSQL_DATABASE=ragnarok
       - MYSQL_ROOT_PASSWORD=R00t+
