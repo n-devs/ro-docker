@@ -136,13 +136,9 @@ services:
     working_dir: /ro-api
     volumes:
       - ./ro-api:/ro-api
+    command: npm start
     ports:
       - "7373:7373"
-    environment:
-      - MYSQL_HOST:db
-      - MYSQL_USER:ragnarok
-      - MYSQL_PASSWORD:ragnarok
-      - MYSQL_DATABASE:ragnarok
     depends_on:
       - db
     networks:
