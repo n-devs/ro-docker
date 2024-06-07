@@ -66,6 +66,19 @@ services:
     networks:
       - ro-network
 
+  app:
+    build: ro-saga-app
+    container_name: ro-saga-app
+    restart: always
+    tty: true
+    working_dir: /ro-saga-app
+    volumes:
+      - ./ro-saga-app:/ro-saga-app
+    ports:
+      - "5173:5173"
+    networks:
+      - ro-network
+
   fluxcp:
     build: ro-fluxcp
     container_name: ro-fluxcp
@@ -76,6 +89,8 @@ services:
       - ./ro-fluxcp:/var/www/html
     ports:
       - 7788:80
+    # command: >
+    #   bash -c apt-get install php-mysql
     networks:
       - ro-network
 
@@ -94,20 +109,19 @@ services:
     # image: node:18
     build: ro-wsproxy
     container_name: ro-wsproxy
+    working_dir: /ro-wsproxy
     restart: always
     tty: true
     # command: >
     #   bash -c wsproxy -a 127.0.0.1:6900,127.0.0.1:6121,127.0.0.1:5121
-    # command: >
-    #   bash -c wsproxy -a serve:6900,serve:6121,serve:5121
+    command: >
+      bash -c wsproxy -a serve:6900,serve:6121,serve:5121 
     ports:
       - "5999:5999"
     networks:
       - ro-network
     depends_on:
       - serve
-      - files
-      - play
 
   phpmyadmin:
     image: phpmyadmin
